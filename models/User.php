@@ -8,14 +8,17 @@ class User {
     }
 
     public function create($name, $email, $password, $mobile = null, $role = 'USER') {
-        $query = "INSERT INTO " . $this->table_name . " (name, email, password, mobile, role) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $this->conn->prepare($query);
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
-        
-        if($stmt->execute([$name, $email, $password_hash, $mobile, $role])) {
-            return $this->conn->lastInsertId();
+        if ($mobile !== null) {
+            $query = "INSERT INTO " . $this->table_name . " (name, email, password, mobile, role) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($query);
+            $result = $stmt->execute([$name, $email, $password_hash, $mobile, $role]);
+        } else {
+            $query = "INSERT INTO " . $this->table_name . " (name, email, password, role) VALUES (?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($query);
+            $result = $stmt->execute([$name, $email, $password_hash, $role]);
         }
-        return false;
+        return $result ? $this->conn->lastInsertId() : false;
     }
 
     public function findByEmail($email) {
