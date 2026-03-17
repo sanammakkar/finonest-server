@@ -36,7 +36,7 @@ class User {
     }
 
     public function findById($id) {
-        $query = "SELECT id, name, email, mobile, role, created_at FROM " . $this->table_name . " WHERE id = ? LIMIT 1";
+        $query = "SELECT id, name, email, role, created_at FROM " . $this->table_name . " WHERE id = ? LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
