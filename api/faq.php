@@ -50,22 +50,10 @@ function requireAdmin() {
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
-$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$pathInfo = $_SERVER['PATH_INFO'] ?? '';
 
-// Extract ID from either PATH_INFO (/41) or REQUEST_URI (/api/faqs/41)
-$faqId = null;
-$isReorder = false;
-
-if (preg_match('/^\/(\d+)$/', $pathInfo, $m)) {
-    $faqId = (int)$m[1];
-} elseif ($pathInfo === '/reorder') {
-    $isReorder = true;
-} elseif (preg_match('/\/api\/faqs\/(\d+)$/', $requestUri, $m)) {
-    $faqId = (int)$m[1];
-} elseif (preg_match('/\/api\/faqs\/reorder$/', $requestUri)) {
-    $isReorder = true;
-}
+// ID and action passed via query string from htaccess rewrite
+$faqId = isset($_GET['_id']) ? (int)$_GET['_id'] : null;
+$isReorder = isset($_GET['_action']) && $_GET['_action'] === 'reorder';
 
 // POST /api/faqs/reorder
 if ($method === 'POST' && $isReorder) {
