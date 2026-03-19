@@ -50,24 +50,25 @@ function requireAdmin() {
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-// Normalize: remove trailing slash
-$path = rtrim($path, '/');
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$pathInfo = $_SERVER['PATH_INFO'] ?? '';
 
-// Also try PATH_INFO if REQUEST_URI doesn't have the ID
-// When htaccess rewrites /api/faqs/41 -> api/faq.php, the ID may be in PATH_INFO
-if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] !== '') {
-    $pathInfo = $_SERVER['PATH_INFO'];
-    // Reconstruct full path for matching
-    if (preg_match('/^\/(\d+)$/', $pathInfo, $m)) {
-        $path = '/api/faqs/' . $m[1];
-    } elseif ($pathInfo === '/reorder') {
-        $path = '/api/faqs/reorder';
-    }
+// Extract ID from either PATH_INFO (/41) or REQUEST_URI (/api/faqs/41)
+$faqId = null;
+$isReorder = false;
+
+if (preg_match('/^\/(\d+)$/', $pathInfo, $m)) {
+    $faqId = (int)$m[1];
+} elseif ($pathInfo === '/reorder') {
+    $isReorder = true;
+} elseif (preg_match('/\/api\/faqs\/(\d+)$/', $requestUri, $m)) {
+    $faqId = (int)$m[1];
+} elseif (preg_match('/\/api\/faqs\/reorder$/', $requestUri)) {
+    $isReorder = true;
 }
 
 // POST /api/faqs/reorder
-if ($method === 'POST' && preg_match('/\/api\/faqs\/reorder$/', $path)) {
+if ($method === 'POST' && $isReorder) {
     requireAdmin();
     $input = json_decode(file_get_contents('php://input'), true);
     $ids = $input['ids'] ?? [];
@@ -80,8 +81,8 @@ if ($method === 'POST' && preg_match('/\/api\/faqs\/reorder$/', $path)) {
 }
 
 // Routes with ID: /api/faqs/{id}
-if (preg_match('/\/api\/faqs\/(\d+)$/', $path, $matches)) {
-    $id = (int)$matches[1];
+if ($faqId !== null) {
+    $id = $faqId;
     switch ($method) {
         case 'PUT':
             requireAdmin();
