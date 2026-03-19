@@ -24,10 +24,9 @@ $db->exec("CREATE TABLE IF NOT EXISTS faqs (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 
-// Add page column if upgrading from old schema
-try {
-    $db->exec("ALTER TABLE faqs ADD COLUMN IF NOT EXISTS page VARCHAR(100) NOT NULL DEFAULT 'home'");
-} catch (Exception $e) { /* column may already exist */ }
+// Add columns if upgrading from old schema
+try { $db->exec("ALTER TABLE faqs ADD COLUMN IF NOT EXISTS page VARCHAR(100) NOT NULL DEFAULT 'home'"); } catch (Exception $e) {}
+try { $db->exec("ALTER TABLE faqs ADD COLUMN IF NOT EXISTS category VARCHAR(100) NOT NULL DEFAULT ''"); } catch (Exception $e) {}
 
 function requireAdmin() {
     $headers = getallheaders() ?: [];
@@ -76,9 +75,10 @@ if (preg_match('/\/api\/faqs\/(\d+)$/', $path, $matches)) {
             $question = trim($input['question'] ?? '');
             $answer = trim($input['answer'] ?? '');
             $page = trim($input['page'] ?? 'home');
+            $category = trim($input['category'] ?? '');
             if (!$question || !$answer) { http_response_code(400); echo json_encode(['error' => 'Question and answer required']); exit(); }
-            $stmt = $db->prepare("UPDATE faqs SET question = ?, answer = ?, page = ? WHERE id = ?");
-            $stmt->execute([$question, $answer, $page, $id]);
+            $stmt = $db->prepare("UPDATE faqs SET question = ?, answer = ?, page = ?, category = ? WHERE id = ?");
+            $stmt->execute([$question, $answer, $page, $category, $id]);
             echo json_encode(['success' => true, 'message' => 'FAQ updated']);
             break;
         case 'DELETE':
@@ -113,12 +113,13 @@ switch ($method) {
         $question = trim($input['question'] ?? '');
         $answer = trim($input['answer'] ?? '');
         $page = trim($input['page'] ?? 'home');
+        $category = trim($input['category'] ?? '');
         if (!$question || !$answer) { http_response_code(400); echo json_encode(['error' => 'Question and answer required']); exit(); }
         $stmt = $db->prepare("SELECT MAX(sort_order) as max_order FROM faqs WHERE page = ?");
         $stmt->execute([$page]);
         $maxOrder = ($stmt->fetch(PDO::FETCH_ASSOC)['max_order'] ?? -1) + 1;
-        $stmt = $db->prepare("INSERT INTO faqs (page, question, answer, sort_order) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$page, $question, $answer, $maxOrder]);
+        $stmt = $db->prepare("INSERT INTO faqs (page, question, answer, sort_order, category) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$page, $question, $answer, $maxOrder, $category]);
         echo json_encode(['success' => true, 'id' => $db->lastInsertId(), 'message' => 'FAQ created']);
         break;
     default:
