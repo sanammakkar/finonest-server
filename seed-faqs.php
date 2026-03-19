@@ -81,6 +81,24 @@ $faqs = [
   ['credit-cards', "What is No Cost EMI on credit cards?", "No Cost EMI allows you to convert purchases above ₹2,500 into equal monthly installments without any interest. The merchant or bank absorbs the interest cost, making it truly interest-free for you."],
   ['credit-cards', "How many airport lounge visits do I get?", "Complimentary lounge access varies by card — typically 4-8 visits per quarter for premium cards. Travel cards offer unlimited domestic lounge access and select international lounge visits."],
   ['credit-cards', "How long does credit card approval take?", "With complete documentation, credit card approval takes 3-7 working days. Some banks offer instant in-principle approval online, with physical card delivery in 7-10 working days."],
+
+  // CREDIT SCORE
+  ['credit-score', "What is a good credit score in India?", "A credit score of 750 and above is considered excellent in India. Scores between 650-749 are good, 550-649 are fair, and below 550 are poor. A score of 750+ gives you access to the best loan rates and fastest approvals."],
+  ['credit-score', "How often should I check my credit score?", "You should check your credit score at least once every 3-6 months. Regular monitoring helps you catch errors early, track your progress, and ensure no fraudulent activity has affected your score."],
+  ['credit-score', "Does checking my credit score reduce it?", "No, checking your own credit score is a 'soft inquiry' and does not affect your score. Only 'hard inquiries' (when a lender checks your score for a loan application) can slightly reduce your score."],
+  ['credit-score', "How long does it take to improve a low credit score?", "With consistent effort — paying bills on time, reducing credit utilization, and avoiding new credit applications — you can see improvement in 3-6 months. Significant improvement typically takes 12-24 months."],
+
+  // EMI CALCULATOR
+  ['emi-calculator', "How is EMI calculated?", "EMI is calculated using the formula: EMI = P × r × (1+r)^n / ((1+r)^n - 1), where P is the principal loan amount, r is the monthly interest rate (annual rate ÷ 12), and n is the number of monthly installments."],
+  ['emi-calculator', "Does a longer loan tenure mean lower EMI?", "Yes, a longer tenure reduces your monthly EMI but increases the total interest paid over the loan period. A shorter tenure means higher EMI but lower total interest cost. Use our calculator to find the right balance."],
+  ['emi-calculator', "Can I reduce my EMI after taking a loan?", "Yes, you can reduce your EMI by making a partial prepayment (which reduces the principal), refinancing at a lower interest rate, or requesting a tenure extension from your lender."],
+  ['emi-calculator', "What happens if I miss an EMI payment?", "Missing an EMI attracts a late payment penalty (usually 1-2% per month on overdue amount), negatively impacts your credit score, and may lead to the loan being classified as NPA if missed for 90+ days."],
+
+  // FINOBIZZ LEARNING
+  ['finobizz-learning', "Who are the courses designed for?", "Our courses are designed for anyone who wants to improve their financial knowledge — from beginners learning about personal finance to professionals seeking advanced investment strategies. No prior finance background is required."],
+  ['finobizz-learning', "Do I get a certificate after completing a course?", "Yes, you receive a certificate of completion for every course you finish. These certificates can be shared on LinkedIn and added to your resume to showcase your financial knowledge."],
+  ['finobizz-learning', "Are the courses self-paced?", "Yes, all courses are completely self-paced with lifetime access. You can learn at your own schedule, pause and resume anytime, and revisit content as many times as you need."],
+  ['finobizz-learning', "What payment methods are accepted for paid courses?", "We accept all major payment methods including UPI, credit/debit cards, net banking, and wallets. EMI options are also available for select courses through our partner payment gateways."],
 ];
 
 $stmt = $db->prepare("INSERT INTO faqs (page, question, answer, sort_order) VALUES (?, ?, ?, ?)");
