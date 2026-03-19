@@ -27,6 +27,7 @@ RewriteRule ^api/loan-onboarding-pdf/?(.*)$ api/loan-onboarding-pdf.php [QSA,L]
 RewriteRule ^api/loan-application/?(.*)$ api/loan-application.php [QSA,L]
 RewriteRule ^api/dsa-registration/?$ api/dsa-registration.php [QSA,L]
 RewriteRule ^api/upload-image/?$ api/upload-image.php [QSA,L]
+RewriteRule ^api/faqs/?(.*)$ api/faq.php [QSA,L]
 
 # Serve uploaded images
 RewriteRule ^uploads/(.*)$ uploads/$1 [L]
