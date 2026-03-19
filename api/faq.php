@@ -13,10 +13,11 @@ try {
     exit();
 }
 
-// Create table with page column
+// Create table with page + category columns
 $db->exec("CREATE TABLE IF NOT EXISTS faqs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     page VARCHAR(100) NOT NULL DEFAULT 'home',
+    category VARCHAR(100) NOT NULL DEFAULT '',
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
     sort_order INT DEFAULT 0,
@@ -24,9 +25,21 @@ $db->exec("CREATE TABLE IF NOT EXISTS faqs (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 
-// Add columns if upgrading from old schema
-try { $db->exec("ALTER TABLE faqs ADD COLUMN IF NOT EXISTS page VARCHAR(100) NOT NULL DEFAULT 'home'"); } catch (Exception $e) {}
-try { $db->exec("ALTER TABLE faqs ADD COLUMN IF NOT EXISTS category VARCHAR(100) NOT NULL DEFAULT ''"); } catch (Exception $e) {}
+// Ensure columns exist (MySQL < 8 does not support IF NOT EXISTS on ALTER TABLE)
+function ensureColumnExists($db, $table, $column, $definition) {
+    try {
+        $stmt = $db->prepare("SHOW COLUMNS FROM `$table` LIKE ?");
+        $stmt->execute([$column]);
+        if ($stmt->rowCount() === 0) {
+            $db->exec("ALTER TABLE `$table` ADD COLUMN $definition");
+        }
+    } catch (Exception $e) {
+        // Best-effort migration; ignore failures
+    }
+}
+
+ensureColumnExists($db, 'faqs', 'page', "page VARCHAR(100) NOT NULL DEFAULT 'home'");
+ensureColumnExists($db, 'faqs', 'category', "category VARCHAR(100) NOT NULL DEFAULT ''");
 
 function requireAdmin() {
     $headers = getallheaders() ?: [];
@@ -49,7 +62,16 @@ function requireAdmin() {
     }
 }
 
-$method = $_SERVER['REQUEST_METHOD'];
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+// Allow method override (e.g., when PUT/DELETE are blocked by host configs)
+$overrideMethod = $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] ?? $_GET['_method'] ?? null;
+if ($overrideMethod) {
+    $overrideMethod = strtoupper($overrideMethod);
+    if (in_array($overrideMethod, ['PUT', 'DELETE', 'PATCH'], true)) {
+        $method = $overrideMethod;
+    }
+}
 
 // ID and action passed via query string from htaccess rewrite
 $faqId = isset($_GET['_id']) ? (int)$_GET['_id'] : null;
