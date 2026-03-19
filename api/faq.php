@@ -51,6 +51,20 @@ function requireAdmin() {
 
 $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// Normalize: remove trailing slash
+$path = rtrim($path, '/');
+
+// Also try PATH_INFO if REQUEST_URI doesn't have the ID
+// When htaccess rewrites /api/faqs/41 -> api/faq.php, the ID may be in PATH_INFO
+if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] !== '') {
+    $pathInfo = $_SERVER['PATH_INFO'];
+    // Reconstruct full path for matching
+    if (preg_match('/^\/(\d+)$/', $pathInfo, $m)) {
+        $path = '/api/faqs/' . $m[1];
+    } elseif ($pathInfo === '/reorder') {
+        $path = '/api/faqs/reorder';
+    }
+}
 
 // POST /api/faqs/reorder
 if ($method === 'POST' && preg_match('/\/api\/faqs\/reorder$/', $path)) {
