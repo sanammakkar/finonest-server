@@ -23,7 +23,7 @@ if (in_array($origin, $allowedOrigins)) {
 
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-HTTP-Method-Override');
 header('Access-Control-Max-Age: 86400');
 
 // Handle preflight OPTIONS requests
