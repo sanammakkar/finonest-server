@@ -94,6 +94,12 @@ $faqs = [
   ['emi-calculator', "Can I reduce my EMI after taking a loan?", "Yes, you can reduce your EMI by making a partial prepayment (which reduces the principal), refinancing at a lower interest rate, or requesting a tenure extension from your lender."],
   ['emi-calculator', "What happens if I miss an EMI payment?", "Missing an EMI attracts a late payment penalty (usually 1-2% per month on overdue amount), negatively impacts your credit score, and may lead to the loan being classified as NPA if missed for 90+ days."],
 
+  // CAREERS
+  ['careers', "What roles are currently open at Finonest?", "We regularly hire for roles in Financial Advisory, Loan Processing, Digital Marketing, Technology, and Operations. Visit our Careers page to see all current openings and apply directly online."],
+  ['careers', "What is the work culture like at Finonest?", "Finonest fosters a performance-driven, collaborative culture. We believe in transparency, continuous learning, and rewarding merit. Our team enjoys flexible work arrangements, regular training, and a supportive environment."],
+  ['careers', "How do I apply for a job at Finonest?", "You can apply directly through our Careers page on finonest.com. Click on any open position, review the requirements, and submit your application online. Our HR team will reach out within 5-7 working days."],
+  ['careers', "Does Finonest offer internships or fresher opportunities?", "Yes! We welcome freshers and offer internship programs across departments including finance, marketing, and technology. Internships often convert to full-time roles based on performance."],
+
   // FINOBIZZ LEARNING
   ['finobizz-learning', "Who are the courses designed for?", "Our courses are designed for anyone who wants to improve their financial knowledge — from beginners learning about personal finance to professionals seeking advanced investment strategies. No prior finance background is required."],
   ['finobizz-learning', "Do I get a certificate after completing a course?", "Yes, you receive a certificate of completion for every course you finish. These certificates can be shared on LinkedIn and added to your resume to showcase your financial knowledge."],
