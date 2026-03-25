@@ -71,7 +71,9 @@ try {
     }
 
     // ── Upload endpoint ──────────────────────────────────────────────────────
-    if ($method === 'POST' && in_array('upload', $parts)) {
+    $isUpload = in_array('upload', $parts) || isset($_GET['action']) && $_GET['action'] === 'upload';
+
+    if ($method === 'POST' && $isUpload) {
         $user = authenticate();
         if ($user['role'] !== 'ADMIN') { http_response_code(403); echo json_encode(['error' => 'Admin only']); exit(); }
 
