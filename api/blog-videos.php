@@ -1,4 +1,8 @@
 <?php
+error_reporting(0);
+ini_set('display_errors', 0);
+header('Content-Type: application/json');
+
 require_once __DIR__ . '/../middleware/cors_secure.php';
 SecureCorsMiddleware::handle();
 
@@ -22,7 +26,18 @@ $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $pathParts = explode('/', trim($path, '/'));
 
 $uploadDir = __DIR__ . '/../uploads/blog-videos/';
-if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+if (!is_dir($uploadDir)) {
+    if (!mkdir($uploadDir, 0755, true)) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Cannot create upload directory']);
+        exit();
+    }
+}
+
+// Override PHP upload limits for this endpoint
+@ini_set('upload_max_filesize', '10M');
+@ini_set('post_max_size', '12M');
+@ini_set('max_execution_time', '60');
 
 try {
     $database = new Database();
