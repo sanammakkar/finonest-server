@@ -17,6 +17,7 @@ RewriteRule ^api/contact/?$ api/contact.php [QSA,L]
 RewriteRule ^api/validate/?$ api/validate.php [QSA,L]
 RewriteRule ^api/ai-config/?$ api/ai-config.php [QSA,L]
 RewriteRule ^api/blogs/?(.*)$ api/blogs.php [QSA,L]
+RewriteRule ^api/blog-videos/upload$ api/blog-videos.php [QSA,L]
 RewriteRule ^api/blog-videos/?(.*)$ api/blog-videos.php [QSA,L]
 RewriteRule ^api/courses/?(.*)$ api/courses.php [QSA,L]
 RewriteRule ^api/leads/?(.*)$ api/leads.php [QSA,L]
@@ -32,7 +33,7 @@ RewriteRule ^api/faqs/reorder$ api/faq.php?_action=reorder [QSA,L]
 RewriteRule ^api/faqs/([0-9]+)$ api/faq.php?_id=$1 [QSA,L]
 RewriteRule ^api/faqs/?$ api/faq.php [QSA,L]
 
-# Serve uploaded images
+# Serve uploaded images and videos
 RewriteRule ^uploads/(.*)$ uploads/$1 [L]
 
 # Security Headers
