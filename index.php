@@ -27,6 +27,8 @@ if (strpos($path, '/api/auth/') === 0) {
 } elseif (strpos($path, '/api/blogs') === 0) {
     $_SERVER['PATH_INFO'] = substr($path, 10); // Remove '/api/blogs'
     include 'api/blogs.php';
+} elseif (strpos($path, '/api/blog-videos') === 0) {
+    include 'api/blog-videos.php';
 } elseif (strpos($path, '/api/courses') === 0) {
     $_SERVER['PATH_INFO'] = substr($path, 12); // Remove '/api/courses'
     include 'api/courses.php';
