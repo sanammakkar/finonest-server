@@ -7,11 +7,17 @@ header('Cache-Control: public, max-age=3600');
 try {
     $database = new Database();
     $pdo = $database->getConnection();
-    $stmt = $pdo->prepare("SELECT * FROM blogs WHERE status = 'published' ORDER BY updated_at DESC");
-    $stmt->execute();
-    $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $blogStmt = $pdo->prepare("SELECT * FROM blogs WHERE status = 'published' ORDER BY updated_at DESC");
+    $blogStmt->execute();
+    $blogs = $blogStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $faqStmt = $pdo->prepare("SELECT * FROM faqs ORDER BY page ASC, sort_order ASC, id ASC");
+    $faqStmt->execute();
+    $faqs = $faqStmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     $blogs = [];
+    $faqs = [];
 }
 
 $baseUrl = 'https://finonest.com';
@@ -19,6 +25,12 @@ $today = date('Y-m-d');
 
 function e($text) {
     return htmlspecialchars(strip_tags(preg_replace('/\s+/', ' ', trim($text))), ENT_XML1 | ENT_QUOTES, 'UTF-8');
+}
+
+// Group FAQs by page
+$faqsByPage = [];
+foreach ($faqs as $faq) {
+    $faqsByPage[$faq['page']][] = $faq;
 }
 
 echo '<?xml version="1.0" encoding="UTF-8"?>';
@@ -34,14 +46,16 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   <url><loc><?= $baseUrl ?>/contact</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc><?= $baseUrl ?>/apply</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc><?= $baseUrl ?>/blog</loc><lastmod><?= $today ?></lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc><?= $baseUrl ?>/faqs</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc><?= $baseUrl ?>/faqs</loc><lastmod><?= $today ?></lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc><?= $baseUrl ?>/emi-calculator</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc><?= $baseUrl ?>/credit-score</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc><?= $baseUrl ?>/banking-partners</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc><?= $baseUrl ?>/branches</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc><?= $baseUrl ?>/careers</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc><?= $baseUrl ?>/dsa-partner</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc><?= $baseUrl ?>/dsa-partner</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc><?= $baseUrl ?>/dsa-registration</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Service Pages -->
   <url><loc><?= $baseUrl ?>/services/home-loan</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc><?= $baseUrl ?>/services/personal-loan</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc><?= $baseUrl ?>/services/business-loan</loc><lastmod><?= $today ?></lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>

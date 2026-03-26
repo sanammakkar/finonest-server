@@ -36,7 +36,8 @@ if ($path === '/api/auth/login' || $path === '/api/auth/register') {
     include 'api/validate.php';
 } elseif (strpos($path, '/api/blog-videos') === 0) {
     include 'api/blog-videos.php';
-} elseif ($path === '/sitemap.xml') {
+} elseif ($path === '/sitemap.xml' || $path === '/api/sitemap') {
+    header('Content-Type: application/xml; charset=utf-8');
     include 'api/sitemap.php';
 } elseif ($path === '/') {
     echo json_encode(['message' => 'Finonest API Server', 'status' => 'running']);
