@@ -40,6 +40,8 @@ function ensureColumnExists($db, $table, $column, $definition) {
 
 ensureColumnExists($db, 'faqs', 'page', "page VARCHAR(100) NOT NULL DEFAULT 'home'");
 ensureColumnExists($db, 'faqs', 'category', "category VARCHAR(100) NOT NULL DEFAULT ''");
+ensureColumnExists($db, 'faqs', 'question_link', "question_link VARCHAR(500) DEFAULT NULL");
+ensureColumnExists($db, 'faqs', 'answer_link', "answer_link VARCHAR(500) DEFAULT NULL");
 
 function requireAdmin() {
     $headers = getallheaders() ?: [];
@@ -101,9 +103,11 @@ if ($faqId !== null) {
             $answer = trim($input['answer'] ?? '');
             $page = trim($input['page'] ?? 'home');
             $category = trim($input['category'] ?? '');
+            $question_link = trim($input['question_link'] ?? '') ?: null;
+            $answer_link = trim($input['answer_link'] ?? '') ?: null;
             if (!$question || !$answer) { http_response_code(400); echo json_encode(['error' => 'Question and answer required']); exit(); }
-            $stmt = $db->prepare("UPDATE faqs SET question = ?, answer = ?, page = ?, category = ? WHERE id = ?");
-            $stmt->execute([$question, $answer, $page, $category, $id]);
+            $stmt = $db->prepare("UPDATE faqs SET question = ?, answer = ?, page = ?, category = ?, question_link = ?, answer_link = ? WHERE id = ?");
+            $stmt->execute([$question, $answer, $page, $category, $question_link, $answer_link, $id]);
             echo json_encode(['success' => true, 'message' => 'FAQ updated']);
             break;
         case 'DELETE':
@@ -139,12 +143,14 @@ switch ($method) {
         $answer = trim($input['answer'] ?? '');
         $page = trim($input['page'] ?? 'home');
         $category = trim($input['category'] ?? '');
+        $question_link = trim($input['question_link'] ?? '') ?: null;
+        $answer_link = trim($input['answer_link'] ?? '') ?: null;
         if (!$question || !$answer) { http_response_code(400); echo json_encode(['error' => 'Question and answer required']); exit(); }
         $stmt = $db->prepare("SELECT MAX(sort_order) as max_order FROM faqs WHERE page = ?");
         $stmt->execute([$page]);
         $maxOrder = ($stmt->fetch(PDO::FETCH_ASSOC)['max_order'] ?? -1) + 1;
-        $stmt = $db->prepare("INSERT INTO faqs (page, question, answer, sort_order, category) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$page, $question, $answer, $maxOrder, $category]);
+        $stmt = $db->prepare("INSERT INTO faqs (page, question, answer, sort_order, category, question_link, answer_link) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$page, $question, $answer, $maxOrder, $category, $question_link, $answer_link]);
         echo json_encode(['success' => true, 'id' => $db->lastInsertId(), 'message' => 'FAQ created']);
         break;
     default:

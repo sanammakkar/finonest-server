@@ -86,6 +86,16 @@ foreach ($blogs as $blog):
         $visibility = json_decode($blog['section_visibility'], true) ?: [];
     }
 
+    // Build full content from all sections for SEO
+    $allSectionText = $blog['excerpt'] . ' ' . $blog['content'];
+    foreach ($sectionKeys as $key) {
+        $inSitemap = !isset($visibility[$key]['sitemap']) || $visibility[$key]['sitemap'] !== false;
+        if ($inSitemap && !empty($blog[$key])) {
+            $allSectionText .= ' ' . $blog[$key];
+        }
+    }
+    $fullDescription = e(mb_substr(preg_replace('/\s+/', ' ', strip_tags($allSectionText)), 0, 500));
+
     $imgUrl = !empty($blog['image_url'])
         ? (strpos($blog['image_url'], 'http') === 0 ? $blog['image_url'] : 'https://api.finonest.com' . $blog['image_url'])
         : '';
@@ -102,13 +112,13 @@ foreach ($blogs as $blog):
       </news:publication>
       <news:publication_date><?= $pubDate ?></news:publication_date>
       <news:title><?= e($blog['title']) ?></news:title>
-      <news:keywords><?= e($blog['meta_tags'] ?? $blog['category']) ?></news:keywords>
+      <news:keywords><?= e(($blog['meta_tags'] ?: '') . ', ' . $blog['category'] . ', finonest, loan india') ?></news:keywords>
     </news:news>
 <?php if ($imgUrl): ?>
     <image:image>
       <image:loc><?= e($imgUrl) ?></image:loc>
       <image:title><?= e($blog['title']) ?></image:title>
-      <image:caption><?= e(mb_substr($blog['excerpt'], 0, 200)) ?></image:caption>
+      <image:caption><?= $fullDescription ?></image:caption>
     </image:image>
 <?php endif; ?>
   </url>
