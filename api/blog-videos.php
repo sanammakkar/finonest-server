@@ -66,7 +66,8 @@ try {
     foreach ([
         "ALTER TABLE blog_videos ADD COLUMN video_url VARCHAR(500) NULL AFTER youtube_url",
         "ALTER TABLE blog_videos MODIFY youtube_url VARCHAR(500) NULL",
-        "ALTER TABLE blog_videos ADD COLUMN poster_url VARCHAR(500) NULL AFTER video_url"
+        "ALTER TABLE blog_videos ADD COLUMN poster_url VARCHAR(500) NULL AFTER video_url",
+        "ALTER TABLE blog_videos ADD COLUMN title_link VARCHAR(500) NULL AFTER title"
     ] as $sql) {
         try { $pdo->exec($sql); } catch (Exception $e) {}
     }
@@ -156,9 +157,10 @@ try {
             if (empty($input['youtube_url']) && empty($input['video_url'])) {
                 http_response_code(400); echo json_encode(['error' => 'youtube_url or video_url required']); exit();
             }
-            $stmt = $pdo->prepare("INSERT INTO blog_videos (title, youtube_url, video_url, poster_url, thumbnail_url, description, position, is_active) VALUES (?,?,?,?,?,?,?,?)");
+            $stmt = $pdo->prepare("INSERT INTO blog_videos (title, title_link, youtube_url, video_url, poster_url, thumbnail_url, description, position, is_active) VALUES (?,?,?,?,?,?,?,?,?)");
             $stmt->execute([
                 $input['title'],
+                $input['title_link'] ?? null,
                 $input['youtube_url'] ?? null,
                 $input['video_url']   ?? null,
                 $input['poster_url']  ?? null,
@@ -177,7 +179,7 @@ try {
             if (!$id) { http_response_code(400); echo json_encode(['error' => 'ID required']); exit(); }
             $input = json_decode(file_get_contents('php://input'), true) ?? [];
             $fields = []; $params = [];
-            foreach (['title','youtube_url','video_url','poster_url','thumbnail_url','description','position','is_active'] as $f) {
+            foreach (['title','title_link','youtube_url','video_url','poster_url','thumbnail_url','description','position','is_active'] as $f) {
                 if (array_key_exists($f, $input)) { $fields[] = "$f = ?"; $params[] = $input[$f]; }
             }
             if (empty($fields)) { http_response_code(400); echo json_encode(['error' => 'Nothing to update']); exit(); }
