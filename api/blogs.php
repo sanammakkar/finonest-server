@@ -145,6 +145,12 @@ try {
             $pdo->exec("ALTER TABLE blogs ADD COLUMN bg_image_url VARCHAR(500) DEFAULT NULL AFTER hero_image_url");
         }
         
+        // Add section_visibility column for frontend/sitemap toggles
+        $result = $pdo->query("SHOW COLUMNS FROM blogs LIKE 'section_visibility'");
+        if ($result->rowCount() == 0) {
+            $pdo->exec("ALTER TABLE blogs ADD COLUMN section_visibility TEXT DEFAULT NULL AFTER trust_footer");
+        }
+
         // Create index if not exists
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_slug ON blogs(slug)");
     } catch (Exception $e) {
@@ -251,8 +257,8 @@ try {
                 table_of_contents, introduction, quick_info_box, emi_example, what_is_loan, benefits, who_should_apply,
                 eligibility_criteria, documents_required, interest_rates, finonest_process, why_choose_finonest,
                 customer_testimonials, common_mistakes, mid_blog_cta, faqs, service_areas, related_blogs,
-                final_cta, final_cta_text, disclaimer, trust_footer) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                final_cta, final_cta_text, disclaimer, trust_footer, section_visibility) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             
             $stmt->execute([
@@ -292,7 +298,8 @@ try {
                 $input['final_cta'] ?? null,
                 $input['final_cta_text'] ?? null,
                 $input['disclaimer'] ?? null,
-                $input['trust_footer'] ?? null
+                $input['trust_footer'] ?? null,
+                isset($input['section_visibility']) ? (is_array($input['section_visibility']) ? json_encode($input['section_visibility']) : $input['section_visibility']) : null
             ]);
 
             $blogId = $pdo->lastInsertId();
@@ -425,6 +432,11 @@ try {
                     $updateFields[] = "$field = ?";
                     $params[] = $input[$field] ?: null;
                 }
+            }
+
+            if (isset($input['section_visibility'])) {
+                $updateFields[] = "section_visibility = ?";
+                $params[] = is_array($input['section_visibility']) ? json_encode($input['section_visibility']) : $input['section_visibility'];
             }
             
             if (empty($updateFields)) {
