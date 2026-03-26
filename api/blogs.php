@@ -134,6 +134,16 @@ try {
         if ($result->rowCount() == 0) {
             $pdo->exec("ALTER TABLE blogs ADD COLUMN title_link VARCHAR(500) DEFAULT NULL AFTER title");
         }
+
+        // Add hero_image_url and bg_image_url columns
+        $result = $pdo->query("SHOW COLUMNS FROM blogs LIKE 'hero_image_url'");
+        if ($result->rowCount() == 0) {
+            $pdo->exec("ALTER TABLE blogs ADD COLUMN hero_image_url VARCHAR(500) DEFAULT NULL AFTER image_url");
+        }
+        $result = $pdo->query("SHOW COLUMNS FROM blogs LIKE 'bg_image_url'");
+        if ($result->rowCount() == 0) {
+            $pdo->exec("ALTER TABLE blogs ADD COLUMN bg_image_url VARCHAR(500) DEFAULT NULL AFTER hero_image_url");
+        }
         
         // Create index if not exists
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_slug ON blogs(slug)");
@@ -237,12 +247,12 @@ try {
             $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $input['title']), '-'));
 
             $stmt = $pdo->prepare("
-                INSERT INTO blogs (title, title_link, slug, excerpt, content, category, author, status, image_url, video_url, meta_title, meta_description, meta_tags,
+                INSERT INTO blogs (title, title_link, slug, excerpt, content, category, author, status, image_url, hero_image_url, bg_image_url, video_url, meta_title, meta_description, meta_tags,
                 table_of_contents, introduction, quick_info_box, emi_example, what_is_loan, benefits, who_should_apply,
                 eligibility_criteria, documents_required, interest_rates, finonest_process, why_choose_finonest,
                 customer_testimonials, common_mistakes, mid_blog_cta, faqs, service_areas, related_blogs,
                 final_cta, final_cta_text, disclaimer, trust_footer) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             
             $stmt->execute([
@@ -255,6 +265,8 @@ try {
                 $user['name'] ?? 'Admin',
                 $input['status'] ?? 'draft',
                 $input['image_url'] ?? null,
+                $input['hero_image_url'] ?? null,
+                $input['bg_image_url'] ?? null,
                 $input['video_url'] ?? null,
                 $input['meta_title'] ?? null,
                 $input['meta_description'] ?? null,
@@ -367,6 +379,16 @@ try {
             if (isset($input['image_url'])) {
                 $updateFields[] = "image_url = ?";
                 $params[] = $input['image_url'] ?: null;
+            }
+
+            if (isset($input['hero_image_url'])) {
+                $updateFields[] = "hero_image_url = ?";
+                $params[] = $input['hero_image_url'] ?: null;
+            }
+
+            if (isset($input['bg_image_url'])) {
+                $updateFields[] = "bg_image_url = ?";
+                $params[] = $input['bg_image_url'] ?: null;
             }
             
             if (isset($input['video_url'])) {
