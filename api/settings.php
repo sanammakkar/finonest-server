@@ -88,7 +88,8 @@ try {
         ['access_key', '', 'Access key for API authentication'],
         ['service_id', '', 'Service ID for Credit API'],
         ['surepass_api_url', 'https://kyc-api.surepass.io/api/v1/rc/rc-full', 'SurePass RC API URL'],
-        ['surepass_token', '', 'SurePass API token']
+        ['surepass_token', '', 'SurePass API token'],
+        ['blog_recent_days', '15', 'Number of days to consider a blog post as recent on blog page']
     ];
     
     foreach ($defaultSettings as $setting) {
@@ -148,7 +149,7 @@ function getSetting($key) {
     global $db;
     
     // Public access for certain settings (no auth required)
-    $publicSettings = ['razorpay_key', 'site_name'];
+    $publicSettings = ['razorpay_key', 'site_name', 'blog_recent_days'];
     
     if (!in_array($key, $publicSettings)) {
         requireAdmin();
