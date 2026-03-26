@@ -65,13 +65,34 @@ try {
     // Migrations — ignore if column already exists
     foreach ([
         "ALTER TABLE blog_videos ADD COLUMN video_url VARCHAR(500) NULL AFTER youtube_url",
-        "ALTER TABLE blog_videos MODIFY youtube_url VARCHAR(500) NULL"
+        "ALTER TABLE blog_videos MODIFY youtube_url VARCHAR(500) NULL",
+        "ALTER TABLE blog_videos ADD COLUMN poster_url VARCHAR(500) NULL AFTER video_url"
     ] as $sql) {
         try { $pdo->exec($sql); } catch (Exception $e) {}
     }
 
     // ── Upload endpoint ──────────────────────────────────────────────────────
     $isUpload = in_array('upload', $parts) || isset($_GET['action']) && $_GET['action'] === 'upload';
+    $isPosterUpload = isset($_GET['action']) && $_GET['action'] === 'upload-poster';
+
+    if ($method === 'POST' && $isPosterUpload) {
+        $user = authenticate();
+        if ($user['role'] !== 'ADMIN') { http_response_code(403); echo json_encode(['error' => 'Admin only']); exit(); }
+
+        if (empty($_FILES['poster'])) {
+            http_response_code(400); echo json_encode(['error' => 'No poster image uploaded']); exit();
+        }
+        $file = $_FILES['poster'];
+        if ($file['error'] !== UPLOAD_ERR_OK) { http_response_code(400); echo json_encode(['error' => 'Upload error ' . $file['error']]); exit(); }
+        if ($file['size'] > 2 * 1024 * 1024) { http_response_code(400); echo json_encode(['error' => 'Poster image max 2MB']); exit(); }
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg','jpeg','png','webp'])) { http_response_code(400); echo json_encode(['error' => 'Only JPG, PNG, WebP allowed']); exit(); }
+        $filename = uniqid('poster_') . '.' . $ext;
+        $dest = $uploadDir . $filename;
+        if (!move_uploaded_file($file['tmp_name'], $dest)) { http_response_code(500); echo json_encode(['error' => 'Failed to save poster']); exit(); }
+        echo json_encode(['success' => true, 'poster_url' => '/uploads/blog-videos/' . $filename]);
+        exit();
+    }
 
     if ($method === 'POST' && $isUpload) {
         $user = authenticate();
@@ -135,11 +156,12 @@ try {
             if (empty($input['youtube_url']) && empty($input['video_url'])) {
                 http_response_code(400); echo json_encode(['error' => 'youtube_url or video_url required']); exit();
             }
-            $stmt = $pdo->prepare("INSERT INTO blog_videos (title, youtube_url, video_url, thumbnail_url, description, position, is_active) VALUES (?,?,?,?,?,?,?)");
+            $stmt = $pdo->prepare("INSERT INTO blog_videos (title, youtube_url, video_url, poster_url, thumbnail_url, description, position, is_active) VALUES (?,?,?,?,?,?,?,?)");
             $stmt->execute([
                 $input['title'],
                 $input['youtube_url'] ?? null,
                 $input['video_url']   ?? null,
+                $input['poster_url']  ?? null,
                 $input['thumbnail_url'] ?? null,
                 $input['description'] ?? null,
                 $input['position']    ?? 0,
@@ -155,7 +177,7 @@ try {
             if (!$id) { http_response_code(400); echo json_encode(['error' => 'ID required']); exit(); }
             $input = json_decode(file_get_contents('php://input'), true) ?? [];
             $fields = []; $params = [];
-            foreach (['title','youtube_url','video_url','thumbnail_url','description','position','is_active'] as $f) {
+            foreach (['title','youtube_url','video_url','poster_url','thumbnail_url','description','position','is_active'] as $f) {
                 if (array_key_exists($f, $input)) { $fields[] = "$f = ?"; $params[] = $input[$f]; }
             }
             if (empty($fields)) { http_response_code(400); echo json_encode(['error' => 'Nothing to update']); exit(); }
