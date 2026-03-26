@@ -122,6 +122,12 @@ try {
         if ($result->rowCount() == 0) {
             $pdo->exec("ALTER TABLE blogs ADD COLUMN blog_section ENUM('auto','recent','older') DEFAULT 'auto' AFTER status");
         }
+
+        // Add show_in_sidebar column
+        $result = $pdo->query("SHOW COLUMNS FROM blogs LIKE 'show_in_sidebar'");
+        if ($result->rowCount() == 0) {
+            $pdo->exec("ALTER TABLE blogs ADD COLUMN show_in_sidebar TINYINT(1) DEFAULT 0 AFTER blog_section");
+        }
         
         // Create index if not exists
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_slug ON blogs(slug)");
@@ -334,6 +340,11 @@ try {
             if (isset($input['blog_section'])) {
                 $updateFields[] = "blog_section = ?";
                 $params[] = $input['blog_section'];
+            }
+
+            if (isset($input['show_in_sidebar'])) {
+                $updateFields[] = "show_in_sidebar = ?";
+                $params[] = $input['show_in_sidebar'] ? 1 : 0;
             }
 
             if (!empty($input['created_at'])) {
