@@ -32,17 +32,26 @@ try {
             id INT AUTO_INCREMENT PRIMARY KEY,
             keyword VARCHAR(255) NOT NULL,
             link VARCHAR(500) NOT NULL,
+            section VARCHAR(50) DEFAULT 'loans',
             position INT DEFAULT 0,
             is_active TINYINT(1) DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ");
 
+    // Migration
+    try { $pdo->exec("ALTER TABLE blog_sidebar_links ADD COLUMN section VARCHAR(50) DEFAULT 'loans' AFTER link"); } catch(Exception $e) {}
+
     switch ($method) {
         case 'GET':
-            $stmt = $pdo->prepare("SELECT * FROM blog_sidebar_links WHERE is_active = 1 ORDER BY position ASC, id ASC");
+            $stmt = $pdo->prepare("SELECT * FROM blog_sidebar_links WHERE is_active = 1 ORDER BY section ASC, position ASC, id ASC");
             $stmt->execute();
-            echo json_encode(['links' => $stmt->fetchAll(PDO::FETCH_ASSOC)]);
+            $all = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode([
+                'links' => $all,
+                'loans' => array_values(array_filter($all, fn($l) => $l['section'] === 'loans')),
+                'categories' => array_values(array_filter($all, fn($l) => $l['section'] === 'categories'))
+            ]);
             break;
 
         case 'POST':
@@ -50,8 +59,8 @@ try {
             if ($user['role'] !== 'ADMIN') { http_response_code(403); echo json_encode(['error' => 'Admin only']); exit(); }
             $input = json_decode(file_get_contents('php://input'), true) ?? [];
             if (empty($input['keyword']) || empty($input['link'])) { http_response_code(400); echo json_encode(['error' => 'keyword and link required']); exit(); }
-            $stmt = $pdo->prepare("INSERT INTO blog_sidebar_links (keyword, link, position, is_active) VALUES (?,?,?,?)");
-            $stmt->execute([$input['keyword'], $input['link'], $input['position'] ?? 0, $input['is_active'] ?? 1]);
+            $stmt = $pdo->prepare("INSERT INTO blog_sidebar_links (keyword, link, section, position, is_active) VALUES (?,?,?,?,?)");
+            $stmt->execute([$input['keyword'], $input['link'], $input['section'] ?? 'loans', $input['position'] ?? 0, $input['is_active'] ?? 1]);
             echo json_encode(['success' => true, 'id' => $pdo->lastInsertId()]);
             break;
 
@@ -62,7 +71,7 @@ try {
             if (!$id) { http_response_code(400); echo json_encode(['error' => 'ID required']); exit(); }
             $input = json_decode(file_get_contents('php://input'), true) ?? [];
             $fields = []; $params = [];
-            foreach (['keyword','link','position','is_active'] as $f) {
+            foreach (['keyword','link','section','position','is_active'] as $f) {
                 if (array_key_exists($f, $input)) { $fields[] = "$f = ?"; $params[] = $input[$f]; }
             }
             if (empty($fields)) { http_response_code(400); echo json_encode(['error' => 'Nothing to update']); exit(); }
