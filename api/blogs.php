@@ -116,6 +116,12 @@ try {
                 $pdo->exec("ALTER TABLE blogs ADD COLUMN $column $type AFTER meta_tags");
             }
         }
+
+        // Add blog_section column
+        $result = $pdo->query("SHOW COLUMNS FROM blogs LIKE 'blog_section'");
+        if ($result->rowCount() == 0) {
+            $pdo->exec("ALTER TABLE blogs ADD COLUMN blog_section ENUM('auto','recent','older') DEFAULT 'auto' AFTER status");
+        }
         
         // Create index if not exists
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_slug ON blogs(slug)");
@@ -323,6 +329,16 @@ try {
             if (isset($input['status'])) {
                 $updateFields[] = "status = ?";
                 $params[] = $input['status'];
+            }
+
+            if (isset($input['blog_section'])) {
+                $updateFields[] = "blog_section = ?";
+                $params[] = $input['blog_section'];
+            }
+
+            if (!empty($input['created_at'])) {
+                $updateFields[] = "created_at = ?";
+                $params[] = $input['created_at'];
             }
             
             if (isset($input['image_url'])) {
