@@ -67,16 +67,6 @@ function submitContactForm() {
         ]);
         
         if ($result) {
-            // Send WhatsApp notification
-            $msg = "*New Contact Form*%0A"
-                 . "Name: " . urlencode($data['name']) . "%0A"
-                 . "Phone: " . urlencode($data['phone']) . "%0A"
-                 . "Email: " . urlencode($data['email']) . "%0A"
-                 . "Loan Type: " . urlencode($data['loan_type'] ?? 'N/A') . "%0A"
-                 . "Amount: " . urlencode($data['amount'] ?? 'N/A');
-            $waUrl = "https://api.callmebot.com/whatsapp.php?phone=919001702542&text=" . $msg . "&apikey=YOUR_CALLMEBOT_APIKEY";
-            @file_get_contents($waUrl);
-
             echo json_encode([
                 'success' => true,
                 'message' => 'Contact form submitted successfully',

@@ -112,20 +112,6 @@ try {
     ]);
     
     if ($result) {
-        // Send WhatsApp notification
-        $products = implode(', ', $input['preferred_products'] ?? []);
-        $msg = "*New DSA Partner Registration*%0A"
-             . "Name: " . urlencode($input['full_name']) . "%0A"
-             . "Mobile: " . urlencode($input['mobile_number']) . "%0A"
-             . "Email: " . urlencode($input['email']) . "%0A"
-             . "City: " . urlencode($input['city']) . ", " . urlencode($input['state']) . "%0A"
-             . "Profession: " . urlencode($input['current_profession']) . "%0A"
-             . "Experience: " . urlencode($input['experience_years']) . " yrs%0A"
-             . "Business Type: " . urlencode($input['business_type']) . "%0A"
-             . "Products: " . urlencode($products);
-        $waUrl = "https://api.callmebot.com/whatsapp.php?phone=919001702542&text=" . $msg . "&apikey=YOUR_CALLMEBOT_APIKEY";
-        @file_get_contents($waUrl);
-
         echo json_encode([
             'success' => true,
             'message' => 'DSA application submitted successfully',
