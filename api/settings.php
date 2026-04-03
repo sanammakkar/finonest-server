@@ -89,7 +89,58 @@ try {
         ['service_id', '', 'Service ID for Credit API'],
         ['surepass_api_url', 'https://kyc-api.surepass.io/api/v1/rc/rc-full', 'SurePass RC API URL'],
         ['surepass_token', '', 'SurePass API token'],
-        ['blog_recent_days', '15', 'Number of days to consider a blog post as recent on blog page']
+        ['blog_recent_days', '15', 'Number of days to consider a blog post as recent on blog page'],
+        // Default SEO meta settings for main pages (can be customized from admin panel)
+        ['meta_home_title', 'Finonest | India\'s Fastest Growing Loan Provider', 'Home page meta title'],
+        ['meta_home_description', 'Finonest - India\'s fastest growing loan provider. Get home loans, car loans, personal loans & business loans with quick approval and best interest rates from 50+ banks.', 'Home page meta description'],
+        ['meta_home_keywords', 'loan, home loan, car loan, personal loan, business loan, used car loan, loan against property, credit card, EMI calculator, credit score, Finonest, financial services India, Jaipur', 'Home page meta keywords'],
+        ['meta_about_title', 'About Finonest | India\'s Trusted Loan Partner', 'About page meta title'],
+        ['meta_about_description', 'Learn about Finonest India Pvt. Ltd., India\'s trusted loan partner helping individuals and businesses with customized financial solutions.', 'About page meta description'],
+        ['meta_about_keywords', 'about finonest, about us, loan company, financial services, Jaipur, India', 'About page meta keywords'],
+        ['meta_services_title', 'Loan Services | Finonest', 'Services page meta title'],
+        ['meta_services_description', 'Explore Finonest loan services including home loans, personal loans, business loans, used car loans, and loans against property from 50+ partner banks.', 'Services page meta description'],
+        ['meta_services_keywords', 'loan services, home loan, personal loan, business loan, Finonest services', 'Services page meta keywords'],
+        ['meta_contact_title', 'Contact Finonest | Get Loan Assistance', 'Contact page meta title'],
+        ['meta_contact_description', 'Contact Finonest for any loan related queries, assistance, or support. Our team is here to help you choose the right financial product.', 'Contact page meta description'],
+        ['meta_contact_keywords', 'contact finonest, loan support, loan enquiry, customer care', 'Contact page meta keywords'],
+        ['meta_blog_title', 'Finonest Blog | Financial Tips & Loan Guides', 'Blog page meta title'],
+        ['meta_blog_description', 'Read Finonest blog for financial tips, loan guides, credit score improvement ideas, and latest updates in the finance world.', 'Blog page meta description'],
+        ['meta_blog_keywords', 'finance blog, loan tips, credit score tips, Finonest blog', 'Blog page meta keywords'],
+        // Service pages SEO meta (loans & credit cards)
+        ['meta_service_home_loan_title', 'Home Loan in India - Best Rates from 8.35% | Finonest | Up to ₹5 Crore', 'Home Loan service page meta title'],
+        ['meta_service_home_loan_description', 'Get best home loan in India starting at 8.35% p.a. with Finonest. Compare 50+ banks, up to ₹5Cr financing, 30-year tenure, instant approval. Trusted home loan provider in Jaipur & across India.', 'Home Loan service page meta description'],
+        ['meta_service_home_loan_keywords', 'home loan in India, best home loan provider India, housing loan, home loan Jaipur, lowest home loan interest rate, home loan 2024, property loan India, home finance, mortgage loan India', 'Home Loan service page meta keywords'],
+        ['meta_service_car_loan_title', 'Car Loan - Finonest | Rates from 7.99% | 100% Financing Available', 'Car Loan service page meta title'],
+        ['meta_service_car_loan_description', 'Drive your dream car with Finonest car loans. Interest rates from 7.99% p.a., 100% financing, same-day approval. New & used car loans available. Apply now!', 'Car Loan service page meta description'],
+        ['meta_service_car_loan_keywords', 'car loan, auto loan, vehicle loan, new car finance, used car loan, best car loan rates India', 'Car Loan service page meta keywords'],
+        ['meta_service_used_car_loan_title', 'Used Car Loan in India - Best Rates 11.5% | Finonest | Up to ₹1.5 Crore', 'Used Car Loan service page meta title'],
+        ['meta_service_used_car_loan_description', 'Get best used car loan in India starting at 11.5% p.a. with Finonest. Finance up to 90% of car value, up to ₹1.5 crore, 7-year tenure. Trusted used car loan provider - compare 35+ banks.', 'Used Car Loan service page meta description'],
+        ['meta_service_used_car_loan_keywords', 'used car loan in India, best used car loan provider, second hand car loan, pre-owned car finance, used car loan Jaipur, used car EMI calculator, used car loan low interest rate 2024', 'Used Car Loan service page meta keywords'],
+        ['meta_service_personal_loan_title', 'Personal Loan in India - Instant Approval up to ₹40 Lakhs | Finonest', 'Personal Loan service page meta title'],
+        ['meta_service_personal_loan_description', 'Get instant personal loan in India up to ₹40 lakhs at 10.49% p.a. with Finonest. Best personal loan provider - minimal docs, 24-hour disbursal, no collateral. Apply online now!', 'Personal Loan service page meta description'],
+        ['meta_service_personal_loan_keywords', 'personal loan in India, best personal loan provider India, instant personal loan, personal loan Jaipur, quick personal loan, unsecured loan India, personal loan low interest rate, personal loan 2024', 'Personal Loan service page meta keywords'],
+        ['meta_service_business_loan_title', 'Business Loan in India - Up to ₹5 Crore | MSME Loan | Finonest', 'Business Loan service page meta title'],
+        ['meta_service_business_loan_description', 'Get best business loan in India up to ₹5 crore with Finonest. Collateral-free MSME loan up to ₹75 lakhs, rates from 14% p.a., 72-hour disbursal. Trusted business loan provider in India.', 'Business Loan service page meta description'],
+        ['meta_service_business_loan_keywords', 'business loan in India, MSME loan India, best business loan provider, working capital loan, collateral free business loan, business loan Jaipur, small business loan India, term loan India, business finance 2024', 'Business Loan service page meta keywords'],
+        ['meta_service_lap_title', 'Loan Against Property - Finonest | Up to 70% LTV | Low Rates 8.75%', 'Loan Against Property service page meta title'],
+        ['meta_service_lap_description', 'Unlock your property\'s value with Finonest LAP. Get up to 70% of property value, rates from 8.75% p.a., 20-year tenure. Residential & commercial properties accepted.', 'Loan Against Property service page meta description'],
+        ['meta_service_lap_keywords', 'loan against property, LAP, property loan, mortgage loan, home equity loan, secured loan India', 'Loan Against Property service page meta keywords'],
+        ['meta_service_credit_cards_title', 'Credit Cards - Finonest | Best Rewards, Travel & Cashback Cards', 'Credit Cards service page meta title'],
+        ['meta_service_credit_cards_description', 'Compare and apply for the best credit cards in India with Finonest. Rewards, travel, cashback cards from HDFC, ICICI, SBI & more. Instant approval available.', 'Credit Cards service page meta description'],
+        ['meta_service_credit_cards_keywords', 'credit card, best credit card India, rewards credit card, travel credit card, cashback card, credit card apply', 'Credit Cards service page meta keywords'],
+        // Other main feature/utility pages
+        ['meta_branches_title', 'Our Branches | Finonest Branch Network Across India', 'Branches page meta title'],
+        ['meta_branches_description', 'Find all Finonest branches across India. View addresses, contact details, and directions to your nearest Finonest branch.', 'Branches page meta description'],
+        ['meta_branches_keywords', 'finonest branches, loan branches, finonest locations, loan office near me, finonest branch Jaipur', 'Branches page meta keywords'],
+        ['meta_cibil_title', 'Check Credit Score - Finonest | Free Credit Score Check', 'Credit score (CIBIL) page meta title'],
+        ['meta_cibil_description', 'Check your credit score for free with Finonest. Get your credit report and understand your credit health. Improve your chances of loan approval.', 'Credit score (CIBIL) page meta description'],
+        ['meta_cibil_keywords', 'credit score, credit score check, free credit report, Finonest, credit rating', 'Credit score (CIBIL) page meta keywords'],
+        ['meta_dsa_partner_title', 'Become DSA Partner in India - Earn High Commission | Finonest', 'DSA Partner page meta title'],
+        ['meta_dsa_partner_description', 'Become a DSA Partner with Finonest - India\'s trusted loan distribution network. Zero investment, high commission on home loan, personal loan, car loan disbursals. Register as loan agent today!', 'DSA Partner page meta description'],
+        ['meta_dsa_partner_keywords', 'DSA partner India, become loan agent, DSA registration, loan DSA partner, earn commission on loans, loan agent business India, DSA partner Jaipur, financial services partner, loan distributor India', 'DSA Partner page meta keywords'],
+        ['meta_emi_calculator_title', 'EMI Calculator - Finonest | Calculate Your Loan EMI', 'EMI Calculator page meta title'],
+        ['meta_emi_calculator_description', 'Use Finonest\'s free EMI calculator to calculate your monthly loan payments. Works for home loans, car loans, personal loans, and more.', 'EMI Calculator page meta description'],
+        ['meta_emi_calculator_keywords', 'EMI calculator, loan calculator, home loan EMI, car loan EMI, personal loan EMI', 'EMI Calculator page meta keywords']
     ];
     
     foreach ($defaultSettings as $setting) {
@@ -151,7 +202,10 @@ function getSetting($key) {
     // Public access for certain settings (no auth required)
     $publicSettings = ['razorpay_key', 'site_name', 'blog_recent_days', 'privacy_policy', 'terms_and_conditions'];
     
-    if (!in_array($key, $publicSettings)) {
+    // Allow public access for SEO meta settings (keys starting with "meta_")
+    $isPublicMetaKey = str_starts_with($key, 'meta_');
+    
+    if (!in_array($key, $publicSettings) && !$isPublicMetaKey) {
         requireAdmin();
     }
     
@@ -281,6 +335,57 @@ function getSettingDescription($key) {
         'secret_key' => 'Secret key for API authentication',
         'access_key' => 'Access key for API authentication',
         'service_id' => 'Service ID for Credit API',
+        // SEO meta descriptions
+        'meta_home_title' => 'Home page meta title',
+        'meta_home_description' => 'Home page meta description',
+        'meta_home_keywords' => 'Home page meta keywords',
+        'meta_about_title' => 'About page meta title',
+        'meta_about_description' => 'About page meta description',
+        'meta_about_keywords' => 'About page meta keywords',
+        'meta_services_title' => 'Services page meta title',
+        'meta_services_description' => 'Services page meta description',
+        'meta_services_keywords' => 'Services page meta keywords',
+        'meta_contact_title' => 'Contact page meta title',
+        'meta_contact_description' => 'Contact page meta description',
+        'meta_contact_keywords' => 'Contact page meta keywords',
+        'meta_blog_title' => 'Blog page meta title',
+        'meta_blog_description' => 'Blog page meta description',
+        'meta_blog_keywords' => 'Blog page meta keywords',
+        // Service pages SEO descriptions
+        'meta_service_home_loan_title' => 'Home Loan service page meta title',
+        'meta_service_home_loan_description' => 'Home Loan service page meta description',
+        'meta_service_home_loan_keywords' => 'Home Loan service page meta keywords',
+        'meta_service_car_loan_title' => 'Car Loan service page meta title',
+        'meta_service_car_loan_description' => 'Car Loan service page meta description',
+        'meta_service_car_loan_keywords' => 'Car Loan service page meta keywords',
+        'meta_service_used_car_loan_title' => 'Used Car Loan service page meta title',
+        'meta_service_used_car_loan_description' => 'Used Car Loan service page meta description',
+        'meta_service_used_car_loan_keywords' => 'Used Car Loan service page meta keywords',
+        'meta_service_personal_loan_title' => 'Personal Loan service page meta title',
+        'meta_service_personal_loan_description' => 'Personal Loan service page meta description',
+        'meta_service_personal_loan_keywords' => 'Personal Loan service page meta keywords',
+        'meta_service_business_loan_title' => 'Business Loan service page meta title',
+        'meta_service_business_loan_description' => 'Business Loan service page meta description',
+        'meta_service_business_loan_keywords' => 'Business Loan service page meta keywords',
+        'meta_service_lap_title' => 'Loan Against Property service page meta title',
+        'meta_service_lap_description' => 'Loan Against Property service page meta description',
+        'meta_service_lap_keywords' => 'Loan Against Property service page meta keywords',
+        'meta_service_credit_cards_title' => 'Credit Cards service page meta title',
+        'meta_service_credit_cards_description' => 'Credit Cards service page meta description',
+        'meta_service_credit_cards_keywords' => 'Credit Cards service page meta keywords',
+        // Other feature/utility page descriptions
+        'meta_branches_title' => 'Branches page meta title',
+        'meta_branches_description' => 'Branches page meta description',
+        'meta_branches_keywords' => 'Branches page meta keywords',
+        'meta_cibil_title' => 'Credit score (CIBIL) page meta title',
+        'meta_cibil_description' => 'Credit score (CIBIL) page meta description',
+        'meta_cibil_keywords' => 'Credit score (CIBIL) page meta keywords',
+        'meta_dsa_partner_title' => 'DSA Partner page meta title',
+        'meta_dsa_partner_description' => 'DSA Partner page meta description',
+        'meta_dsa_partner_keywords' => 'DSA Partner page meta keywords',
+        'meta_emi_calculator_title' => 'EMI Calculator page meta title',
+        'meta_emi_calculator_description' => 'EMI Calculator page meta description',
+        'meta_emi_calculator_keywords' => 'EMI Calculator page meta keywords',
     ];
     return $descriptions[$key] ?? '';
 }
