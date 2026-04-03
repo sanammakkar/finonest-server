@@ -90,6 +90,7 @@ try {
         ['surepass_api_url', 'https://kyc-api.surepass.io/api/v1/rc/rc-full', 'SurePass RC API URL'],
         ['surepass_token', '', 'SurePass API token'],
         ['blog_recent_days', '15', 'Number of days to consider a blog post as recent on blog page'],
+        ['privacy_policy', '', 'Privacy policy HTML content for public page'],
         // Default SEO meta settings for main pages (can be customized from admin panel)
         ['meta_home_title', 'Finonest | India\'s Fastest Growing Loan Provider', 'Home page meta title'],
         ['meta_home_description', 'Finonest - India\'s fastest growing loan provider. Get home loans, car loans, personal loans & business loans with quick approval and best interest rates from 50+ banks.', 'Home page meta description'],
@@ -434,6 +435,7 @@ function getSettingDescription($key) {
         'meta_careers_title' => 'Careers page meta title',
         'meta_careers_description' => 'Careers page meta description',
         'meta_careers_keywords' => 'Careers page meta keywords',
+        'privacy_policy' => 'Privacy policy HTML content for public page',
     ];
     return $descriptions[$key] ?? '';
 }
